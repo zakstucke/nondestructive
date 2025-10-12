@@ -1,6 +1,6 @@
-use std::array;
+use core::array;
 
-use bstr::ByteSlice;
+use alloc::vec::Vec;
 
 use crate::yaml::data::{Data, Id, StringId};
 use crate::yaml::error::{Error, ErrorKind};
@@ -8,7 +8,7 @@ use crate::yaml::raw::{self, Raw};
 use crate::yaml::serde_hint;
 use crate::yaml::Document;
 
-type Result<T, E = Error> = std::result::Result<T, E>;
+type Result<T, E = Error> = core::result::Result<T, E>;
 
 const EOF: u8 = b'\0';
 
@@ -797,7 +797,7 @@ impl<'a> Parser<'a> {
 
         if nl == 0 {
             self.find(raw::NEWLINE);
-            let out = self.input.get(start..self.n).unwrap_or_default().trim();
+            let out = trim(self.input.get(start..self.n).unwrap_or_default());
             self.scratch.extend_from_slice(out);
 
             (ws, nl) = self.ws_nl();
@@ -813,7 +813,7 @@ impl<'a> Parser<'a> {
         while !self.is_eof() {
             let s = self.n;
             self.find(raw::NEWLINE);
-            let out = self.input.get(s..self.n).unwrap_or_default().trim();
+            let out = trim(self.input.get(s..self.n).unwrap_or_default());
             self.scratch.extend_from_slice(out);
 
             end = self.n;
@@ -953,4 +953,19 @@ impl<'a> Parser<'a> {
         let string = self.data.insert_str(string);
         Some(raw::String::new(raw::RawStringKind::Bare, string, string))
     }
+}
+
+/// Trim ascii whitespace.
+const fn trim(bytes: &[u8]) -> &[u8] {
+    let mut out = bytes;
+
+    while let [ws!(), rest @ ..] = out {
+        out = rest;
+    }
+
+    while let [rest @ .., ws!()] = out {
+        out = rest;
+    }
+
+    out
 }

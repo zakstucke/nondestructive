@@ -17,18 +17,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: dtolnay/rust-toolchain@1.73
-    - run: cargo test --workspace --all-targets --no-default-features
-    - run: cargo test --workspace --all-targets --no-default-features --features serde-edits
-    - run: cargo test --workspace --all-targets --all-features
+    - uses: dtolnay/rust-toolchain@1.81
+    - run: cargo build --workspace --lib --no-default-features
+    - run: cargo build --workspace --lib
+
+  feature:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        feature: [ "std", "yaml", "serde", "serde-edits", "alloc", "default" ]
+    steps:
+    - uses: actions/checkout@v4
+    - uses: dtolnay/rust-toolchain@stable
+    - run: cargo check --workspace --lib --features ${{ matrix.feature }}
 
   test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - uses: dtolnay/rust-toolchain@stable
-    - run: cargo test --workspace --all-targets --no-default-features
-    - run: cargo test --workspace --all-targets --no-default-features --features serde-edits
     - run: cargo test --workspace --all-targets --all-features
     - run: cargo test --workspace --doc --all-features
       env:
@@ -41,7 +48,6 @@ jobs:
     - uses: dtolnay/rust-toolchain@stable
       with:
         components: clippy
-    - run: cargo clippy --workspace --no-default-features --all-targets -- -D warnings -D clippy::pedantic
     - run: cargo clippy --workspace --all-features --all-targets -- -D warnings -D clippy::pedantic
 
   docs:
@@ -51,8 +57,8 @@ jobs:
     - uses: dtolnay/rust-toolchain@nightly
     - run: cargo doc --all-features
       env:
-        RUSTFLAGS: --cfg docsrs
-        RUSTDOCFLAGS: --cfg docsrs
+        RUSTFLAGS: --cfg doc_cfg
+        RUSTDOCFLAGS: --cfg doc_cfg
 
   rustfmt:
     runs-on: ubuntu-latest

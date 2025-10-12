@@ -25,7 +25,7 @@ use crate::yaml::raw;
 /// let a = a.as_ref();
 ///
 /// let a = a.as_any().into_string().context("expected string")?;
-/// let a = a.to_str()?;
+/// let a = a.to_str().context("expected string")?;
 /// assert_eq!(a, "Hello\n World");
 /// # Ok::<_, anyhow::Error>(())
 /// ```

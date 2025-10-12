@@ -1,3 +1,5 @@
+use alloc::string::ToString;
+
 use anyhow::Result;
 
 use crate::yaml;

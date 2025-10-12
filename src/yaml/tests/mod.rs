@@ -1,8 +1,12 @@
+#![cfg(feature = "alloc")]
+
 mod actions;
 mod escape;
 mod mapping;
 mod multiline;
 mod sequence;
+
+use alloc::string::ToString;
 
 use anyhow::{Context, Result};
 

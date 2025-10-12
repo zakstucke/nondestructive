@@ -1,4 +1,9 @@
-use std::fmt;
+use core::fmt;
+
+use alloc::string::String;
+use alloc::vec::Vec;
+
+#[cfg(feature = "std")]
 use std::io;
 
 #[cfg(feature = "serde-edits")]
@@ -95,7 +100,7 @@ impl Document {
     ///
     /// let mut doc = yaml::from_slice(
     ///     r"
-    ///     first: 32
+    ///     first: 32c::
     ///     second: [1, 2, 3]
     ///     "
     /// )?;
@@ -263,6 +268,8 @@ impl Document {
     /// );
     /// # Ok::<_, anyhow::Error>(())
     /// ```
+    #[cfg(feature = "std")]
+    #[cfg_attr(doc_cfg, doc(cfg(feature = "std")))]
     pub fn write_to<O>(&self, mut output: O) -> io::Result<()>
     where
         O: io::Write,
@@ -275,7 +282,7 @@ impl Document {
 
     // Display helper for document.
     fn display(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        use std::fmt::Display;
+        use core::fmt::Display;
 
         self.data.prefix(self.root).fmt(f)?;
         self.data.raw(self.root).display(&self.data, f, None)?;
@@ -291,6 +298,7 @@ impl fmt::Display for Document {
         // matches whatever would've been produced through `Document::write_to`.
         //
         // This is only enabled with `--cfg nondestructive_write_to_eq`.
+        #[cfg(feature = "std")]
         if cfg!(nondestructive_write_to_eq) {
             use bstr::BStr;
             use std::fmt::Write;
@@ -318,12 +326,10 @@ impl fmt::Display for Document {
                 "nondestructive_write_to_eq: ensure write_to produces the same output"
             );
 
-            string.fmt(f)?;
-        } else {
-            self.display(f)?;
+            return string.fmt(f);
         }
 
-        Ok(())
+        self.display(f)
     }
 }
 

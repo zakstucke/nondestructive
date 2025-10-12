@@ -1,8 +1,11 @@
+use core::fmt;
+use core::hash::Hash;
+use core::mem;
+use core::num::NonZeroUsize;
+
+use alloc::boxed::Box;
+
 use std::collections::hash_map::{self, HashMap};
-use std::fmt;
-use std::hash::Hash;
-use std::mem;
-use std::num::NonZeroUsize;
 
 use bstr::BStr;
 #[cfg(feature = "serde-edits")]

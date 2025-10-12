@@ -1,4 +1,6 @@
-use std::fmt;
+use core::fmt;
+
+use alloc::string::ToString;
 
 use serde::de;
 

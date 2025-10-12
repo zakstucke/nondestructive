@@ -185,6 +185,15 @@
 #![deny(missing_docs)]
 #![allow(clippy::module_inception)]
 #![allow(clippy::module_name_repetitions)]
-#![cfg_attr(docsrs, feature(doc_cfg))]
+#![cfg_attr(doc_cfg, feature(doc_cfg))]
+#![no_std]
 
+#[cfg(feature = "std")]
+extern crate std;
+
+#[cfg(feature = "alloc")]
+extern crate alloc;
+
+#[cfg(all(feature = "alloc", feature = "std"))]
+#[cfg_attr(doc_cfg, doc(cfg(all(feature = "alloc", feature = "std"))))]
 pub mod yaml;

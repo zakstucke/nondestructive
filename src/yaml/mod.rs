@@ -97,7 +97,7 @@ pub mod mapping;
 pub use self::mapping::{Mapping, MappingMut};
 
 #[cfg(feature = "serde")]
-#[cfg_attr(docsrs, doc(cfg(feature = "serde")))]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "serde")))]
 pub mod serde;
 
 #[cfg(any(feature = "serde", feature = "serde-edits"))]

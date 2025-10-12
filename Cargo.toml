@@ -3,7 +3,7 @@ name = "nondestructive"
 version = "0.0.27"
 authors = ["John-John Tedro <udoprog@tedro.se>"]
 edition = "2021"
-rust-version = "1.73"
+rust-version = "1.81"
 description = "Nondestructive editing over various file formats."
 documentation = "https://docs.rs/nondestructive"
 readme = "README.md"
@@ -14,18 +14,20 @@ keywords = ["yaml"]
 categories = ["encoding", "parser-implementations"]
 
 [features]
-default = ["yaml"]
+default = ["std", "yaml"]
 yaml = []
 serde = ["dep:serde", "bstr/serde"]
-serde-edits = ["dep:serde", "bstr/serde", "serde?/derive", "slab/serde"]
+serde-edits = ["std", "dep:serde", "bstr/serde", "serde?/derive", "slab/serde"]
+std = ["alloc", "bstr/std"]
+alloc = []
 
 [lints.rust]
-unexpected_cfgs = { level = "warn", check-cfg = ['cfg(nondestructive_write_to_eq)'] }
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(doc_cfg, nondestructive_write_to_eq)'] }
 
 [dependencies]
-bstr = "1.4.0"
+bstr = { version = "1.4.0", default-features = false }
 itoa = "1.0.6"
-lexical-core = "0.8.5"
+lexical-core = { version = "1.0.0", default-features = false, features = ["parse-floats", "parse-integers"] }
 memchr = "2.5.0"
 ryu = "1.0.13"
 serde = { version = "1.0.160", optional = true }
@@ -39,4 +41,4 @@ serde_yaml = "0.9.21"
 
 [package.metadata.docs.rs]
 all-features = true
-rustdoc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "doc_cfg"]

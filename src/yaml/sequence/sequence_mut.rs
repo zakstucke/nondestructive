@@ -1,5 +1,7 @@
 use core::mem;
 
+use alloc::vec::Vec;
+
 use crate::yaml::data::{Data, Id, StringId};
 use crate::yaml::raw::{self, Raw};
 use crate::yaml::{Block, Separator, Sequence, ValueMut};

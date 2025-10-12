@@ -1,3 +1,5 @@
+use alloc::vec::Vec;
+
 use crate::yaml::data::{Data, Id};
 use crate::yaml::raw::{self, Raw};
 use crate::yaml::{AnyMut, Block, MappingMut, Null, SequenceMut, StringKind, Value};
