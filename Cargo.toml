@@ -30,7 +30,7 @@ memchr = "2.5.0"
 ryu = "1.0.13"
 serde = { version = "1.0.160", optional = true }
 slab = "0.4.8"
-twox-hash = "1.6.3"
+twox-hash = { version = "1.6.3", default-features = false }
 
 [dev-dependencies]
 anyhow = "1.0.70"
