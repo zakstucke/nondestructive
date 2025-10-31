@@ -93,10 +93,9 @@ pub(crate) fn make_indent(data: &mut Data, id: Id, extra: usize) -> (usize, Stri
         // - two: 2
         //   three: 3
         // ```
-        if let Some((Raw::SequenceItem(..), layout)) = parent.map(|id| data.pair(id)) {
-            let indent = self::count_indent(data.str(layout.prefix))
-                .saturating_add(2)
-                .saturating_add(extra);
+        if let Some((Raw::SequenceItem(..), _)) = parent.map(|id| data.pair(id)) {
+            // Use the sequence's base indentation plus the dash and space (2 chars)
+            let indent = indent.saturating_add(2).saturating_add(extra);
             return (indent, data.insert_str(" "));
         }
     }
